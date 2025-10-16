@@ -2,41 +2,19 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
 func main() {
+	start := time.Now() // record start time
 
-	now := time.Now()
-
-	fmt.Printf(" this is the start , it starts at %v ", now)
-
-	fmt.Println()
-
-	var wg sync.WaitGroup
-
-	msgchan := make(chan string, 15)
-
-	wg.Add(10)
-
-	i := 0
-
-	for i = 0; i < 10; i++ {
-
-		go concurrentWorld(msgchan, &wg)
-
+	for i := 1; i <= 1000; i++ {
+		fmt.Printf("Hello, World %d\n", i)
 	}
 
-	go func() {
-		wg.Wait()
-		close(msgchan)
-	}()
+	elapsed := time.Since(start) // calculate time taken
+	fmt.Sprintf("Time taken: %v\n", elapsed)
 
-	for msg := range msgchan {
-		fmt.Println(msg)
+	testConcurrentWorld()
 
-	}
-
-	fmt.Printf(" ending time %v", time.Since(now))
 }
