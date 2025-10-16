@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	numUsers := 1000
+	numUsers := 10000000
 
 	fmt.Println("=== Performance Test: 1000 Concurrent User Fetches ===\n")
 
