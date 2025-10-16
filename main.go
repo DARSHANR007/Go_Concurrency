@@ -2,60 +2,43 @@ package main
 
 import (
 	"fmt"
-	"sync"
-	"time"
 )
 
 func main() {
+	numUsers := 1000
 
-	var wg sync.WaitGroup
+	fmt.Println("=== Performance Test: 1000 Concurrent User Fetches ===\n")
 
-	fmt.Println("ths is the start ")
+	// Test 1: Unbuffered
+	fmt.Println("Test 1: UNBUFFERED CHANNEL")
+	unbufferedTime := testUnbuffered(numUsers)
 
-	channel1 := make(chan string)
+	fmt.Println()
 
-	now := time.Now()
+	// Test 2: Small buffer
+	fmt.Println("Test 2: SMALL BUFFER (size 10)")
+	smallBufferTime := testBuffered(numUsers, 10)
 
-	userID := 10
+	fmt.Println()
 
-	go getUserId(userID, channel1, &wg)
-	go getUserLikes(userID, channel1, &wg)
-	go getUserPosts(userID, channel1, &wg)
+	// Test 3: Medium buffer
+	fmt.Println("Test 3: MEDIUM BUFFER (size 100)")
+	mediumBufferTime := testBuffered(numUsers, 100)
 
-	go func() {
-		wg.Wait()
-		close(channel1)
-	}()
+	fmt.Println()
 
-	for curr := range channel1 {
-		fmt.Println(curr)
+	// Test 4: Large buffer
+	fmt.Println("Test 4: LARGE BUFFER (size 1000)")
+	largeBufferTime := testBuffered(numUsers, 1000)
 
-	}
+	fmt.Println()
+	fmt.Println("=== Performance Comparison ===")
+	fmt.Printf("Unbuffered:        %v (baseline)\n", unbufferedTime)
+	fmt.Printf("Small Buffer:      %v (%.2fx faster)\n", smallBufferTime, float64(unbufferedTime)/float64(smallBufferTime))
+	fmt.Printf("Medium Buffer:     %v (%.2fx faster)\n", mediumBufferTime, float64(unbufferedTime)/float64(mediumBufferTime))
+	fmt.Printf("Large Buffer:      %v (%.2fx faster)\n", largeBufferTime, float64(unbufferedTime)/float64(largeBufferTime))
 
-	fmt.Println(time.Since(now))
-
-}
-
-func getUserId(id int, response chan string, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	time.Sleep(120 * time.Millisecond)
-
-	response <- "got the userID"
-
-}
-
-func getUserLikes(id int, response chan string, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	time.Sleep(80 * time.Millisecond)
-	response <- "got the userLikes"
-
-}
-
-func getUserPosts(id int, response chan string, wg *sync.WaitGroup) {
-
-	defer wg.Done()
-	time.Sleep(50 * time.Millisecond)
-	response <- "got the userPosts"
+	// Calculate improvement
+	improvement := float64(unbufferedTime-largeBufferTime) / float64(unbufferedTime) * 100
+	fmt.Printf("\nPerformance improvement: %.1f%% faster with buffer\n", improvement)
 }
