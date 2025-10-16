@@ -18,8 +18,6 @@ func main() {
 
 	userID := 10
 
-	wg.Add(3)
-
 	go getUserId(userID, channel1, &wg)
 	go getUserLikes(userID, channel1, &wg)
 	go getUserPosts(userID, channel1, &wg)
