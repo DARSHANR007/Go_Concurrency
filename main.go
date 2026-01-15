@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	// start := time.Now() // record start time
 
@@ -14,11 +12,13 @@ func main() {
 
 	// testConcurrentWorld()
 
-	array := []int{1, 2, 3, 4, 5, 6}
+	// array := []int{1, 2, 3, 4, 5, 6}
 
-	result := splitSum(array)
+	// result := splitSum(array)
 
-	fmt.Println(result)
+	// fmt.Println(result)
 
-	fmt.Println(*result)
+	// fmt.Println(*result)
+
+	pingpong()
 }

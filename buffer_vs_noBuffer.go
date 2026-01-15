@@ -81,7 +81,7 @@ func testBuffered(numUsers int, bufferSize int) time.Duration {
 func test() {
 	numUsers := 1000
 
-	fmt.Println("=== Performance Test: 1000 Concurrent User Fetches ===\n")
+	fmt.Println("=== Performance Test: 1000 Concurrent User Fetches ===")
 
 	// Test 1: Unbuffered
 	fmt.Println("Test 1: UNBUFFERED CHANNEL")

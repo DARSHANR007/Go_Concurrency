@@ -10,7 +10,7 @@ func concurrentWorld(msgChan chan string, wg *sync.WaitGroup) {
 
 	defer wg.Done()
 
-	msgChan <- fmt.Sprintf("This is hello world from concurrency ")
+	msgChan <- "This is hello world from concurrency "
 
 }
 
