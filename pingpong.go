@@ -8,21 +8,29 @@ import (
 func pingpong() {
 	pingchan := make(chan string)
 	pongchan := make(chan string)
+	done := make(chan bool)
 
 	go func() {
-		for {
-			pingchan <- "ping"
-			fmt.Println("   ", <-pongchan)
+		for i := 0; i < 10; i++ {
+			pingchan <- "ping"             // send ping
+			fmt.Println("   ", <-pongchan) //recieve pong
 			time.Sleep(500 * time.Millisecond)
+
 		}
+
+		close(pingchan)
 	}()
 
 	go func() {
-		for {
-			fmt.Println("   ", <-pingchan)
+		for msg := range pingchan {
+			fmt.Println(msg)
 			pongchan <- "pong"
 		}
+
+		done <- true
+
 	}()
 
-	select {}
+	<-done
+
 } // pingpong moved into main.go to allow `go run main.go` without extra files.
