@@ -16,9 +16,9 @@ func worker(id int, jobs <-chan Job, results chan<- string, wg *sync.WaitGroup) 
 
 	for job := range jobs {
 
-		fmt.Printf("Worker %d: Processing image %d\n", id, job.ID)
+		fmt.Printf("Worker %d: Processing image %d\n", id, job.id)
 		time.Sleep(time.Millisecond * 500)
-		results <- fmt.Sprintf("Result: Image %d processed by Worker %d", job.ID, id)
+		results <- fmt.Sprintf("Result: Image %d processed by Worker %d", job.id, id)
 	}
 
 }
